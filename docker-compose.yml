@@ -1,11 +1,14 @@
 version: '2'
+networks:
+    ingress:
+        external: true
 services:
 
     nginx:
         build: .
         image: umputun/nginx-le:latest
         hostname: nginx
-        restart: always
+        restart: unless-stopped
         container_name: nginx
 
         logging:
@@ -23,10 +26,13 @@ services:
             - "443:443"
 
         environment:
-            - TZ=America/Chicago
+            - TZ=UTC
             - LETSENCRYPT=true
-            - LE_EMAIL=name@example.com
-            - LE_FQDN=www.example.com
+            - LE_EMAIL=admin@rissner.net
+            - LE_FQDN=rissner.com,rissner.org,rissner.net,rissner.eu,www.rissner.com,www.rissner.org,www.rissner.eu,mail.rissner.com,mail.rissner.org,mail.rissner.net,mail.rissner.eu,pinky.rissner.net
             #- SSL_CERT=le-crt.pem
             #- SSL_KEY=le-key.pem
             #- SSL_CHAIN_CERT=le-chain-crt.pem
+        networks:
+            - default
+            - ingress
